@@ -1,0 +1,21 @@
+.contact {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 8px;
+  align-items: center;
+  gap: 48px;
+  width: 300px;
+}
+.icon {
+  padding-right: 6px;
+}
+.btn {
+  background-color: gray;
+  color: white;
+  border-color: black;
+}
+.btn:hover {
+  background-color: blue;
+}

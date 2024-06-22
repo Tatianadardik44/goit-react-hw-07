@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import { fetchContacts, addContact, deleteContact } from "./contactsOps";
+import { selectNameFilter } from "./filterSlice";
 
 
 
@@ -40,38 +41,23 @@ const contactsSlice = createSlice({
                 state.loading = true;
                 state.error = false;
             })
-            .addCase( deleteContact.fulfilled, (state, action) => {
+            .addCase(deleteContact.fulfilled, (state, action) => {
+                 state.loading = false;
                 const index = state.items.findIndex(item => item.id === action.payload.id)
                 state.items.splice(index, 1)
-                state.loading = false;
+               
             })
             .addCase( deleteContact.rejected, (state, action) => {
                 state.error = action.payload;
                 state.loading = false;
             })
-})
+  })
+
 export const selectError = (state) => state.contacts.error
 export const selectLoading = (state) => state.contacts.loading
 export const selectContacts = (state) => state.contacts.items;
-
+export const selectFilteredContacts = createSelector([selectContacts, selectNameFilter], (contacts, filterName) => {
+    return contacts.filter(contact => contact.name.toLowerCase().includes(filterName.toLowerCase()));
+})
 export const contactReducer = contactsSlice.reducer
-    // reducers: {
-    //     addContact: {
-    //         reducer(state, action) {
-    //             state.items.push(action.payload);
-    //         },
-    //         prepare(name, number) {
-    //             return {
-    //                 payload: {
-    //                     name,
-    //                     id: nanoid(),
-    //                     number
-    //                 },
-    //             };
-    //         },
-    //     },
-    //     deleteContact(state, action) {
-    //         const index = state.items.findIndex(contact => contact.id === action.payload);
-    //         state.items.splice(index, 1);
-    //     }
-    // }
+   
